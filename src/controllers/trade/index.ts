@@ -70,6 +70,33 @@ export async function createTrade(
   }
 }
 
+export async function cancelTrade(
+  req: Request,
+  res: Response,
+): Promise<Response> {
+  try {
+    const { id } = req.params;
+
+    const cleanReqBody = sanitizeInputGetTrade({ id });
+
+    // @ts-ignore
+    const trade = await crypticBase.updateTrade({ id: cleanReqBody.id }, { state: 'canceled', ended_at: new Date() });
+
+    return res.status(200).send({
+      status_code: 200,
+      results: trade,
+      errors: [],
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      status_code: 500,
+      results: {},
+      errors: [err.message],
+    });
+  }
+}
+
 export async function getTrade(
   req: Request,
   res: Response,

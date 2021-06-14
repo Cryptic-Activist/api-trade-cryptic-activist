@@ -39,3 +39,11 @@ export interface ISanitizedInputGetTrade {
 export interface ISanitizedInputCreateGetReturn {
   id?: BigInt;
 }
+
+export interface ISanitizedInputCancelTrade {
+  id: string;
+}
+
+export interface ISanitizedInputCancelReturn {
+  id?: BigInt;
+}

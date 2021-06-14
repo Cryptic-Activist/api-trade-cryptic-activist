@@ -5,6 +5,8 @@ import {
   ISanitizedInputCreateTradeReturn,
   ISanitizedInputCreateGetReturn,
   ISanitizedInputGetTrade,
+  ISanitizedInputCancelReturn,
+  ISanitizedInputCancelTrade,
 } from '@interfaces/controllers/trade';
 
 export function sanitizeInputCreateTrade(tradeObj: ISanitizedInputCreateTrade):
@@ -94,6 +96,24 @@ ISanitizedInputCreateTradeReturn {
 
 export function sanitizeInputGetTrade(tradeObj: ISanitizedInputGetTrade):
 ISanitizedInputCreateGetReturn {
+  const finalTradeObj: ISanitizedInputCreateGetReturn = {};
+
+  if (tradeObj.id) {
+    const cleanTradeChatId: string = sanitizeHtml(
+      tradeObj.id,
+      {
+        allowedTags: [],
+      },
+    ).trim();
+
+    finalTradeObj.id = BigInt(cleanTradeChatId);
+  }
+
+  return finalTradeObj;
+}
+
+export function sanitizeInputCancelTrade(tradeObj: ISanitizedInputCancelTrade):
+ISanitizedInputCancelReturn {
   const finalTradeObj: ISanitizedInputCreateGetReturn = {};
 
   if (tradeObj.id) {
