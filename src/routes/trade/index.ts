@@ -7,6 +7,7 @@ import {
   validateCreateTrade,
   validateGetTrade,
   validateCancelTrade,
+  validateSetPaidTrade,
 } from '@utils/validators/request/trader';
 
 const router = Router();
@@ -16,6 +17,8 @@ router.get('/index', index);
 router.post('/create', authenticateUser, validateCreateTrade, createTrade);
 
 router.put('/cancel', authenticateUser, validateCancelTrade, cancelTrade);
+
+router.put('/paid', authenticateUser, validateSetPaidTrade);
 
 router.get('/get/:id',
   // authenticateUser,
