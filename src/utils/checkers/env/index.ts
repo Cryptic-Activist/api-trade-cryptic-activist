@@ -12,7 +12,7 @@ export function checkEnvironmentVariable(): void {
   if (!process.env.CRYPTIC_ACTIVIST_CATALOG) {
     missingEnvs.push('CRYPTIC_ACTIVIST_CATALOG');
   }
-  if (!process.env.JWT_ACCESS_TOKEN_SECRET) {
+  if (!process.env.JWT_SECRET) {
     missingEnvs.push('JWT_ACCESS_TOKEN_SECRET');
   }
   if (!process.env.JWT_REFRESH_TOKEN_SECRET) {
