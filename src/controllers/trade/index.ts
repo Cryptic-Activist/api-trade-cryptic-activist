@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import CrypticBase from 'cryptic-base';
-import { sanitizeInputCreateTrade, sanitizeInputGetTrade } from '@utils/sanitizer/trade';
-
-const crypticBase = new CrypticBase(false);
+import { createTrade, updateTrade, getTrade } from 'cryptic-base';
+import {
+  sanitizeInputCreateTrade,
+  sanitizeInputGetTrade,
+} from '@utils/sanitizer/trade';
 
 export async function index(req: Request, res: Response): Promise<Response> {
   try {
@@ -16,7 +17,7 @@ export async function index(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function createTrade(
+export async function createTradeController(
   req: Request,
   res: Response,
 ): Promise<Response> {
@@ -43,7 +44,7 @@ export async function createTrade(
       fiat_amount,
     });
 
-    const newTrade = await crypticBase.createTrade({
+    const newTrade = await createTrade({
       chat_id: cleanReqBody.chat_id,
       cryptocurrency_id: cleanReqBody.cryptocurrency_id,
       offer_id: cleanReqBody.offer_id,
@@ -80,7 +81,10 @@ export async function cancelTrade(
     const cleanReqBody = sanitizeInputGetTrade({ id });
 
     // @ts-ignore
-    const trade = await crypticBase.updateTrade({ id: cleanReqBody.id }, { state: 'canceled', ended_at: new Date() });
+    const trade = await updateTrade(
+      { id: cleanReqBody.id },
+      { state: 'canceled', ended_at: new Date() },
+    );
 
     return res.status(200).send({
       status_code: 200,
@@ -107,7 +111,10 @@ export async function setPaidTrade(
     const cleanReqBody = sanitizeInputGetTrade({ id });
 
     // @ts-ignore
-    const trade = await crypticBase.updateTrade({ id: cleanReqBody.id }, { state: 'canceled', ended_at: new Date() });
+    const trade = await updateTrade(
+      { id: cleanReqBody.id },
+      { state: 'canceled', ended_at: new Date() },
+    );
 
     return res.status(200).send({
       status_code: 200,
@@ -124,7 +131,7 @@ export async function setPaidTrade(
   }
 }
 
-export async function getTrade(
+export async function getTradeController(
   req: Request,
   res: Response,
 ): Promise<Response> {
@@ -134,8 +141,11 @@ export async function getTrade(
     const cleanReqBody = sanitizeInputGetTrade({ id });
 
     // @ts-ignore
-    const trade = await crypticBase.getTrade(['vendor', 'offer', 'cryptocurrency', 'chat'], { id: cleanReqBody.id });
-    // const trade = await crypticBase.getTrade(['offer'], { id: cleanReqBody.id });
+    const trade = await getTrade(
+      ['vendor', 'offer', 'cryptocurrency', 'chat'],
+      { id: cleanReqBody.id },
+    );
+    // const trade = await getTrade(['offer'], { id: cleanReqBody.id });
 
     return res.status(200).send({
       status_code: 200,
