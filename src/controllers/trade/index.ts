@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { createTrade, updateTrade, getTrade } from 'cryptic-base';
+import {
+  createTrade,
+  updateTrade,
+  getTrade,
+  safeTradeValuesAssigner,
+} from 'cryptic-base';
 import {
   sanitizeInputCreateTrade,
   sanitizeInputGetTrade,
@@ -82,6 +87,7 @@ export async function cancelTrade(
 
     // @ts-ignore
     const trade = await updateTrade(
+      // @ts-ignore
       { id: cleanReqBody.id },
       { state: 'canceled', ended_at: new Date() },
     );
@@ -112,6 +118,7 @@ export async function setPaidTrade(
 
     // @ts-ignore
     const trade = await updateTrade(
+      // @ts-ignore
       { id: cleanReqBody.id },
       { state: 'canceled', ended_at: new Date() },
     );
@@ -141,15 +148,20 @@ export async function getTradeController(
     const cleanReqBody = sanitizeInputGetTrade({ id });
 
     // @ts-ignore
-    const trade = await getTrade(
-      ['vendor', 'offer', 'cryptocurrency', 'chat'],
-      { id: cleanReqBody.id },
-    );
-    // const trade = await getTrade(['offer'], { id: cleanReqBody.id });
+    const trade = await getTrade({ id: cleanReqBody.id }, [
+      'vendor',
+      'trader',
+      'offer',
+      'cryptocurrency',
+      'fiat',
+      'chat',
+    ]);
+
+    const safeTrade = safeTradeValuesAssigner(trade);
 
     return res.status(200).send({
       status_code: 200,
-      results: trade,
+      results: safeTrade,
       errors: [],
     });
   } catch (err) {
