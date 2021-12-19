@@ -157,6 +157,14 @@ export async function getTradeController(
       'chat',
     ]);
 
+    if (!trade) {
+      return res.status(204).send({
+        status_code: 204,
+        results: {},
+        errors: [],
+      });
+    }
+
     const safeTrade = safeTradeValuesAssigner(trade);
 
     return res.status(200).send({
