@@ -1,9 +1,11 @@
 import { success } from '@utils/logger/logger';
 import chalk from 'chalk';
-import { checkEnvironmentVariable } from '@utils/checkers/env';
+import { checkEnvironmentVariable, success } from 'cryptic-utils';
 import app from './app';
 
-checkEnvironmentVariable();
+import requiredEnv from '../envs.json';
+
+checkEnvironmentVariable(requiredEnv);
 
 const port = process.env.PORT;
 

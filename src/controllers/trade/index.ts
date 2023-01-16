@@ -4,7 +4,7 @@ import {
   updateTrade,
   getTrade,
   safeTradeValuesAssigner,
-} from 'cryptic-base';
+} from 'base-ca';
 import {
   sanitizeInputCreateTrade,
   sanitizeInputGetTrade,
