@@ -1,19 +1,19 @@
 import { Router } from 'express';
 
 import {
-  index,
+  cancelTrade,
   createTradeController,
   getTradeController,
-  cancelTrade,
-} from '@controllers/trade';
-import { authenticateUser } from '@middlewares/authorization';
+  index,
+} from '../../controllers/trade';
+import { authenticateUser } from '../../middlewares/authorization';
 
 import {
+  validateCancelTrade,
   validateCreateTrade,
   validateGetTrade,
-  validateCancelTrade,
   validateSetPaidTrade,
-} from '@utils/validators/request/trader';
+} from '../../utils/validators/request/trader';
 
 const router = Router();
 

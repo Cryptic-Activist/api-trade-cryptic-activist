@@ -1,14 +1,11 @@
-import { Request, Response } from 'express';
+import { sanitizeInputGetTrade } from '@utils/sanitizer/trade';
 import {
   createTrade,
-  updateTrade,
   getTrade,
   safeTradeValuesAssigner,
+  updateTrade,
 } from 'base-ca';
-import {
-  sanitizeInputCreateTrade,
-  sanitizeInputGetTrade,
-} from '@utils/sanitizer/trade';
+import { Request, Response } from 'express';
 
 export async function index(req: Request, res: Response): Promise<Response> {
   try {
@@ -27,39 +24,9 @@ export async function createTradeController(
   res: Response,
 ): Promise<Response> {
   try {
-    const {
-      vendor_id,
-      trader_id,
-      offer_id,
-      cryptocurrency_id,
-      fiat_id,
-      chat_id,
-      cryptocurrency_amount,
-      fiat_amount,
-    } = req.body;
+    const { body } = req;
 
-    const cleanReqBody = sanitizeInputCreateTrade({
-      vendor_id,
-      trader_id,
-      offer_id,
-      cryptocurrency_id,
-      fiat_id,
-      chat_id,
-      cryptocurrency_amount,
-      fiat_amount,
-    });
-
-    const newTrade = await createTrade({
-      chat_id: cleanReqBody.chat_id,
-      cryptocurrency_id: cleanReqBody.cryptocurrency_id,
-      offer_id: cleanReqBody.offer_id,
-      state: 'ongoing',
-      trader_id: cleanReqBody.trader_id,
-      vendor_id: cleanReqBody.vendor_id,
-      fiat_id: cleanReqBody.fiat_id,
-      cryptocurrency_amount: cleanReqBody.cryptocurrency_amount,
-      fiat_amount: cleanReqBody.fiat_amount,
-    });
+    const newTrade = await createTrade(body);
 
     return res.status(200).send({
       status_code: 200,
