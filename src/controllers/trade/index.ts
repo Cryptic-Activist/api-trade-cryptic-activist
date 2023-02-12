@@ -1,10 +1,5 @@
 import { sanitizeInputGetTrade } from '@utils/sanitizer/trade';
-import {
-  createTrade,
-  getTrade,
-  safeTradeValuesAssigner,
-  updateTrade,
-} from 'base-ca';
+import { createTrade, getTrade, updateTrade } from 'base-ca';
 import { Request, Response } from 'express';
 
 export async function index(req: Request, res: Response): Promise<Response> {
@@ -110,19 +105,20 @@ export async function getTradeController(
   res: Response,
 ): Promise<Response> {
   try {
-    const { id } = req.params;
+    const { params } = req;
+    const { id } = params;
 
-    const cleanReqBody = sanitizeInputGetTrade({ id });
-
-    // @ts-ignore
-    const trade = await getTrade({ id: cleanReqBody.id }, [
-      'vendor',
-      'trader',
-      'offer',
-      'cryptocurrency',
-      'fiat',
-      'chat',
-    ]);
+    const trade = await getTrade(
+      { id },
+      {
+        chat: true,
+        cryptocurrency: true,
+        fiat: true,
+        offer: true,
+        trader: true,
+        vendor: true,
+      },
+    );
 
     if (!trade) {
       return res.status(204).send({
@@ -132,11 +128,11 @@ export async function getTradeController(
       });
     }
 
-    const safeTrade = safeTradeValuesAssigner(trade);
+    // const safeTrade = safeTradeValuesAssigner(trade);
 
     return res.status(200).send({
       status_code: 200,
-      results: safeTrade,
+      results: trade,
       errors: [],
     });
   } catch (err) {

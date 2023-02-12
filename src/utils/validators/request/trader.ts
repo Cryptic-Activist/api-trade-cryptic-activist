@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateTrade } from '../../../middlewares/validators/trades';
+import { CreateTrade, GetTrade } from '../../../middlewares/validators/trades';
 
 export function validateCreateTrade(
   req: Request,
@@ -12,7 +12,6 @@ export function validateCreateTrade(
   if (validated.success) {
     next();
   } else {
-    console.log(validated);
     return res.status(400).send({
       status_code: 400,
       results: {},
@@ -27,31 +26,19 @@ export function validateGetTrade(
   res: Response,
   next: NextFunction,
 ): NextFunction | Response {
-  const { id } = req.params;
+  const { params } = req;
+  const validated = GetTrade.safeParse(params);
 
-  const errors: string[] = [];
-
-  if (!id) {
-    errors.push('id is required.');
-  } else if (id.length === 0) {
-    errors.push('id must be valid.');
-  }
-
-  try {
-    BigInt(id);
-  } catch (err) {
-    errors.push('id must be a number.');
-  }
-
-  if (errors.length > 0) {
+  if (validated.success) {
+    next();
+  } else {
     return res.status(400).send({
       status_code: 400,
       results: {},
-      errors,
+      // @ts-ignore
+      errors: validated.errors,
     });
   }
-
-  next();
 }
 
 export function validateCancelTrade(

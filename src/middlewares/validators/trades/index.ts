@@ -10,4 +10,8 @@ export const CreateTrade = z.object({
   fiatAmount: z.number().gt(0),
 });
 
+export const GetTrade = z.object({
+  id: z.string(),
+});
+
 export type CreateTradeType = z.infer<typeof CreateTrade>;
