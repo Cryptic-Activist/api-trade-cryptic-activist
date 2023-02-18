@@ -1,6 +1,6 @@
-import { sanitizeInputGetTrade } from '@utils/sanitizer/trade';
 import { createTrade, getTrade, updateTrade } from 'base-ca';
 import { Request, Response } from 'express';
+import { sanitizeInputGetTrade } from '../../utils/sanitizer/trade';
 
 export async function index(req: Request, res: Response): Promise<Response> {
   try {

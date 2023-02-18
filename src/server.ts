@@ -1,7 +1,7 @@
-import { success } from '@utils/logger/logger';
 import chalk from 'chalk';
-import { checkEnvironmentVariable, success } from 'cryptic-utils';
+import { checkEnvironmentVariable } from 'cryptic-utils';
 import app from './app';
+import { success } from './utils/logger/logger';
 
 import requiredEnv from '../envs.json';
 
