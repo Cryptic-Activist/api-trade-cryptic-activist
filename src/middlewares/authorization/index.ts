@@ -1,4 +1,4 @@
-import { fetcherAuth } from 'cryptic-utils';
+import { fetchGet } from 'cryptic-utils';
 import { NextFunction, Request, Response } from 'express';
 
 export async function authenticateUser(
@@ -7,25 +7,24 @@ export async function authenticateUser(
   next: NextFunction,
 ): Promise<Response> {
   try {
-    const data = await fetcherAuth(
+    const { headers } = req;
+    const { authorization } = headers;
+
+    const auth = await fetchGet(
       `${process.env.USER_API_ENDPOINT}/users/authorization/authorize`,
-      'GET',
-      req.headers.authorization,
+      { Authorization: authorization },
     );
 
-    if (data.status_code === 200) {
-      next();
-    } else {
+    if (auth.status !== 200) {
       return res.status(401).send({
         status_code: 401,
-        results: {},
-        errors: [],
       });
     }
+
+    next();
   } catch (err) {
     return res.status(401).send({
       status_code: 401,
-      results: {},
       errors: [err.message],
     });
   }
