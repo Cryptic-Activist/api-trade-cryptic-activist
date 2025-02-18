@@ -11,7 +11,7 @@ export async function authenticateUser(
     const { authorization } = headers;
 
     const auth = await fetchGet(
-      `${process.env.USER_API_ENDPOINT}/users/authorization/authorize`,
+      `${process.env.USER_API}/users/authorization/authorize`,
       { Authorization: authorization },
     );
 
